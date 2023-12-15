@@ -482,6 +482,7 @@ func (kws *Websocket) send(ctx context.Context) {
 			}
 
 			kws.mu.RLock()
+			kws.Conn.SetWriteDeadline(time.Now().Add(10 * time.Second))
 			err := kws.Conn.WriteMessage(message.mType, message.data)
 			kws.mu.RUnlock()
 
@@ -522,6 +523,7 @@ func (kws *Websocket) read(ctx context.Context) {
 			}
 
 			kws.mu.RLock()
+			kws.Conn.SetReadDeadline(time.Now().Add(10 * time.Second))
 			mType, msg, err := kws.Conn.ReadMessage()
 			kws.mu.RUnlock()
 
